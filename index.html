@@ -3,643 +3,569 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Friday Schedule Dashboard - Shell BMW Motorsport Macau GP</title>
+    <title>Macau GP Schedule - Shell BMW Motorsport</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: #ffffff;
-            padding: 40px 20px;
+            color: #fff;
+            padding: 30px 15px;
             min-height: 100vh;
             -webkit-tap-highlight-color: transparent;
         }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .header {
-            text-align: center;
-            margin-bottom: 50px;
-        }
-        
-        .header h1 {
-            font-size: 42px;
-            font-weight: 700;
-            margin-bottom: 10px;
-            color: #fff;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-        
-        .header p {
-            font-size: 18px;
-            color: #b0b0b0;
-            font-weight: 300;
-        }
-        
+        .container { max-width: 1400px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 40px; }
+        .header h1 { font-size: 36px; font-weight: 700; margin-bottom: 8px; }
+        .header p { font-size: 16px; color: #b0b0b0; }
         .team-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
-            margin-bottom: 40px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
         }
-        
         .team-card {
             background: #2d2d44;
-            border-radius: 16px;
-            padding: 30px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+            border-radius: 12px;
+            padding: 24px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            border: 3px solid transparent;
+            border: 3px solid;
             -webkit-user-select: none;
-            user-select: none;
         }
-        
-        .team-card:active {
-            transform: scale(0.98);
-        }
-        
-        .team-card.graeme {
-            border-color: #FF6B35;
-        }
-        
-        .team-card.vik {
-            border-color: #4ECDC4;
-        }
-        
-        .team-card.jan {
-            border-color: #FFE66D;
-        }
-        
-        .team-card h2 {
-            font-size: 32px;
-            margin-bottom: 15px;
-            font-weight: 700;
-            pointer-events: none;
-        }
-        
-        .team-card.graeme h2 {
-            color: #FF6B35;
-        }
-        
-        .team-card.vik h2 {
-            color: #4ECDC4;
-        }
-        
-        .team-card.jan h2 {
-            color: #FFE66D;
-        }
-        
-        .team-card p {
-            font-size: 16px;
-            color: #b0b0b0;
-            line-height: 1.6;
-            pointer-events: none;
-        }
-        
+        .team-card:active { transform: scale(0.98); }
+        .team-card.graeme { border-color: #FF6B35; }
+        .team-card.vik { border-color: #4ECDC4; }
+        .team-card.jan { border-color: #FFE66D; }
+        .team-card.emily { border-color: #9B59B6; }
+        .team-card.japan { border-color: #E74C3C; }
+        .team-card h2 { font-size: 28px; margin-bottom: 12px; pointer-events: none; }
+        .team-card.graeme h2 { color: #FF6B35; }
+        .team-card.vik h2 { color: #4ECDC4; }
+        .team-card.jan h2 { color: #FFE66D; }
+        .team-card.emily h2 { color: #9B59B6; }
+        .team-card.japan h2 { color: #E74C3C; }
+        .team-card p { font-size: 14px; color: #b0b0b0; line-height: 1.5; pointer-events: none; }
         .btn {
             display: inline-block;
-            margin-top: 20px;
-            padding: 12px 24px;
-            border-radius: 8px;
+            margin-top: 16px;
+            padding: 10px 20px;
+            border-radius: 6px;
             font-weight: 600;
-            transition: all 0.3s ease;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            font-size: 13px;
             pointer-events: none;
         }
-        
-        .team-card.graeme .btn {
-            background: #FF6B35;
-            color: #fff;
-        }
-        
-        .team-card.vik .btn {
-            background: #4ECDC4;
-            color: #fff;
-        }
-        
-        .team-card.jan .btn {
-            background: #FFE66D;
-            color: #1a1a2e;
-        }
-        
-        .detail-view {
-            display: none;
-            background: #2d2d44;
-            border-radius: 16px;
-            padding: 40px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-            margin-top: 30px;
-        }
-        
-        .detail-view.active {
-            display: block;
-            animation: fadeIn 0.4s ease;
-        }
-        
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
+        .team-card.graeme .btn { background: #FF6B35; color: #fff; }
+        .team-card.vik .btn { background: #4ECDC4; color: #fff; }
+        .team-card.jan .btn { background: #FFE66D; color: #1a1a2e; }
+        .team-card.emily .btn { background: #9B59B6; color: #fff; }
+        .team-card.japan .btn { background: #E74C3C; color: #fff; }
+        .detail-view { display: none; background: #2d2d44; border-radius: 12px; padding: 30px; margin-top: 20px; }
+        .detail-view.active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         .detail-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
             border-bottom: 3px solid;
         }
-        
-        .detail-view.graeme .detail-header {
-            border-bottom-color: #FF6B35;
-        }
-        
-        .detail-view.vik .detail-header {
-            border-bottom-color: #4ECDC4;
-        }
-        
-        .detail-view.jan .detail-header {
-            border-bottom-color: #FFE66D;
-        }
-        
-        .detail-header h2 {
-            font-size: 36px;
-            font-weight: 700;
-        }
-        
-        .detail-view.graeme .detail-header h2 {
-            color: #FF6B35;
-        }
-        
-        .detail-view.vik .detail-header h2 {
-            color: #4ECDC4;
-        }
-        
-        .detail-view.jan .detail-header h2 {
-            color: #FFE66D;
-        }
-        
+        .detail-view.graeme .detail-header { border-bottom-color: #FF6B35; }
+        .detail-view.vik .detail-header { border-bottom-color: #4ECDC4; }
+        .detail-view.jan .detail-header { border-bottom-color: #FFE66D; }
+        .detail-view.emily .detail-header { border-bottom-color: #9B59B6; }
+        .detail-view.japan .detail-header { border-bottom-color: #E74C3C; }
+        .detail-header h2 { font-size: 32px; }
+        .detail-view.graeme .detail-header h2 { color: #FF6B35; }
+        .detail-view.vik .detail-header h2 { color: #4ECDC4; }
+        .detail-view.jan .detail-header h2 { color: #FFE66D; }
+        .detail-view.emily .detail-header h2 { color: #9B59B6; }
+        .detail-view.japan .detail-header h2 { color: #E74C3C; }
         .close-btn {
             background: rgba(255,255,255,0.1);
             color: #fff;
             border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
+            padding: 8px 16px;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
-            transition: all 0.3s ease;
-            -webkit-tap-highlight-color: transparent;
         }
-        
-        .close-btn:active {
-            background: rgba(255,255,255,0.2);
-            transform: scale(0.95);
+        .close-btn:active { transform: scale(0.95); }
+        .day-nav { display: flex; gap: 12px; margin-bottom: 25px; flex-wrap: wrap; }
+        .day-btn {
+            flex: 1;
+            min-width: 100px;
+            padding: 12px 20px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.2);
+            color: #fff;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
         }
-        
-        .timeline {
-            position: relative;
-            padding-left: 40px;
+        .day-btn:active { transform: scale(0.97); }
+        .detail-view.emily .day-btn.active { background: #9B59B6; border-color: #9B59B6; }
+        .detail-view.japan .day-btn.active { background: #E74C3C; border-color: #E74C3C; }
+        .day-section { margin-bottom: 40px; }
+        .day-section.hidden { display: none; }
+        .day-header {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            padding: 12px 20px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            border-left: 4px solid;
         }
-        
+        .detail-view.graeme .day-header { border-left-color: #FF6B35; }
+        .detail-view.vik .day-header { border-left-color: #4ECDC4; }
+        .detail-view.jan .day-header { border-left-color: #FFE66D; }
+        .detail-view.emily .day-header { border-left-color: #9B59B6; }
+        .detail-view.japan .day-header { border-left-color: #E74C3C; }
+        .timeline { position: relative; padding-left: 35px; }
         .timeline::before {
             content: '';
             position: absolute;
             left: 0;
             top: 0;
             bottom: 0;
-            width: 4px;
+            width: 3px;
             background: rgba(255,255,255,0.2);
         }
-        
         .timeline-item {
             position: relative;
-            margin-bottom: 30px;
-            padding: 20px;
+            margin-bottom: 20px;
+            padding: 16px;
             background: rgba(255,255,255,0.05);
-            border-radius: 12px;
-            border-left: 4px solid;
+            border-radius: 10px;
+            border-left: 3px solid;
         }
-        
-        .detail-view.graeme .timeline-item {
-            border-left-color: #FF6B35;
-        }
-        
-        .detail-view.vik .timeline-item {
-            border-left-color: #4ECDC4;
-        }
-        
-        .detail-view.jan .timeline-item {
-            border-left-color: #FFE66D;
-        }
-        
+        .detail-view.graeme .timeline-item { border-left-color: #FF6B35; }
+        .detail-view.vik .timeline-item { border-left-color: #4ECDC4; }
+        .detail-view.jan .timeline-item { border-left-color: #FFE66D; }
+        .detail-view.emily .timeline-item { border-left-color: #9B59B6; }
+        .detail-view.japan .timeline-item { border-left-color: #E74C3C; }
         .timeline-item::before {
             content: '';
             position: absolute;
-            left: -43px;
-            top: 24px;
-            width: 12px;
-            height: 12px;
+            left: -38px;
+            top: 20px;
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
             background: #fff;
         }
-        
         .time {
             display: inline-block;
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            padding: 6px 16px;
-            border-radius: 6px;
-        }
-        
-        .detail-view.graeme .time {
-            background: rgba(255, 107, 53, 0.2);
-            color: #FF6B35;
-        }
-        
-        .detail-view.vik .time {
-            background: rgba(78, 205, 196, 0.2);
-            color: #4ECDC4;
-        }
-        
-        .detail-view.jan .time {
-            background: rgba(255, 230, 109, 0.2);
-            color: #FFE66D;
-        }
-        
-        .activity {
             font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #fff;
+            font-weight: 700;
+            margin-bottom: 6px;
+            padding: 4px 14px;
+            border-radius: 5px;
         }
-        
-        .details {
-            font-size: 15px;
-            color: #b0b0b0;
-            line-height: 1.6;
-        }
-        
+        .detail-view.graeme .time { background: rgba(255, 107, 53, 0.2); color: #FF6B35; }
+        .detail-view.vik .time { background: rgba(78, 205, 196, 0.2); color: #4ECDC4; }
+        .detail-view.jan .time { background: rgba(255, 230, 109, 0.2); color: #FFE66D; }
+        .detail-view.emily .time { background: rgba(155, 89, 182, 0.2); color: #9B59B6; }
+        .detail-view.japan .time { background: rgba(231, 76, 60, 0.2); color: #E74C3C; }
+        .activity { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+        .details { font-size: 14px; color: #b0b0b0; line-height: 1.5; }
         .note-box {
             background: rgba(255, 193, 7, 0.1);
             border-left: 4px solid #FFC107;
-            padding: 20px;
+            padding: 16px;
             border-radius: 8px;
-            margin-top: 30px;
+            margin-top: 25px;
         }
-        
-        .note-box h3 {
-            color: #FFC107;
-            font-size: 18px;
-            margin-bottom: 10px;
-            font-weight: 700;
-        }
-        
-        .note-box p {
-            color: #e0e0e0;
-            font-size: 15px;
-            line-height: 1.6;
-        }
-        
+        .note-box h3 { color: #FFC107; font-size: 16px; margin-bottom: 8px; }
+        .note-box p { color: #e0e0e0; font-size: 14px; line-height: 1.5; }
         @media (max-width: 768px) {
-            .header h1 {
-                font-size: 32px;
-            }
-            
-            .team-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .detail-view {
-                padding: 25px;
-            }
-            
-            .detail-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-            }
+            .header h1 { font-size: 28px; }
+            .team-grid { grid-template-columns: 1fr; }
+            .detail-view { padding: 20px; }
+            .detail-header { flex-direction: column; align-items: flex-start; gap: 12px; }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>Friday Team Schedule</h1>
-            <p>Shell BMW Motorsport | Macau GP</p>
+            <h1>Macau GP Team Schedule</h1>
+            <p>Shell BMW Motorsport | 14-18 November 2025</p>
         </div>
         
         <div class="team-grid" id="teamGrid">
             <div class="team-card graeme" data-person="graeme">
                 <h2>Graeme</h2>
-                <p>Leading coordination, guest management, and rooftop operations throughout the day</p>
+                <p>Event coordination, guest management, hospitality operations</p>
                 <span class="btn">View Schedule →</span>
             </div>
-            
             <div class="team-card vik" data-person="vik">
                 <h2>Vik</h2>
-                <p>Guest collection, rooftop introduction, and evening market greeting duties</p>
+                <p>Guest support, rooftop operations, market greeting</p>
                 <span class="btn">View Schedule →</span>
             </div>
-            
             <div class="team-card jan" data-person="jan">
                 <h2>Jan</h2>
-                <p>Airport transfers, hotel transport coordination, and Japan delegation collection</p>
+                <p>Airport transfers, transport coordination, delegation logistics</p>
+                <span class="btn">View Schedule →</span>
+            </div>
+            <div class="team-card emily" data-person="emily">
+                <h2>Emily</h2>
+                <p>Shell coordinator: filming, garage tours, launches, BMW liaison</p>
+                <span class="btn">View Schedule →</span>
+            </div>
+            <div class="team-card japan" data-person="japan">
+                <h2>Japan Delegation</h2>
+                <p>10 guests: Full weekend hospitality package</p>
                 <span class="btn">View Schedule →</span>
             </div>
         </div>
         
-        <!-- Graeme's Detail View -->
         <div class="detail-view graeme" id="detail-graeme">
             <div class="detail-header">
-                <h2>Graeme's Schedule</h2>
-                <button class="close-btn" data-action="close">✕ Close</button>
+                <h2>Graeme</h2>
+                <button class="close-btn">✕</button>
             </div>
-            
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="time">09:50</div>
-                    <div class="activity">Meet in Lobby</div>
-                    <div class="details">
-                        Meet Joris and Emily with Vik in the lobby to collect tickets
+            <div class="day-section">
+                <div class="day-header">Friday 14th November</div>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="time">09:50</div>
+                        <div class="activity">Meet in Lobby</div>
+                        <div class="details">Meet Joris and Emily with Vik to collect tickets</div>
                     </div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="time">10:15-10:30</div>
-                    <div class="activity">Brief Jan on Airport Schedule</div>
-                    <div class="details">
-                        Run through airport schedule with Jan in the lobby. Cover timings, procedures, and coordination for Chris and Karl collection
+                    <div class="timeline-item">
+                        <div class="time">10:15</div>
+                        <div class="activity">Brief Jan</div>
+                        <div class="details">Airport schedule briefing with Jan</div>
                     </div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="time">11:00</div>
-                    <div class="activity">Rooftop Introduction</div>
-                    <div class="details">
-                        Head to top floor with Vik to introduce yourselves to Helen and the rooftop team
+                    <div class="timeline-item">
+                        <div class="time">11:00</div>
+                        <div class="activity">Rooftop Introduction</div>
+                        <div class="details">Meet Helen and rooftop team with Vik</div>
                     </div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="time">15:00</div>
-                    <div class="activity">China Market Check</div>
-                    <div class="details">
-                        Head upstairs with Vik to check on China market guests
+                    <div class="timeline-item">
+                        <div class="time">15:00</div>
+                        <div class="activity">China Market Check</div>
+                        <div class="details">Check on China market guests with Vik</div>
                     </div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="time">16:30</div>
-                    <div class="activity">Rooftop Rehearsal - ALL TEAM</div>
-                    <div class="details">
-                        Everyone on the roof (pending Emily's approval) to ensure smooth running of rehearsal and confirm Saturday's arrangements. Full team attendance required
+                    <div class="timeline-item">
+                        <div class="time">16:30</div>
+                        <div class="activity">Rooftop Rehearsal - ALL TEAM</div>
+                        <div class="details">Full team rehearsal with BMW and Shell</div>
                     </div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="time">19:00</div>
-                    <div class="activity">Japan Delegation Collection</div>
-                    <div class="details">
-                        Be ready to collect Japan delegation from airport with team. Final details and timings to be confirmed with Jan after Chris and Karl transfer
-                    </div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="time">Evening</div>
-                    <div class="activity">Market Greeting & Check-in</div>
-                    <div class="details">
-                        Be in lobby with Vik to greet market guests and usher them into dining room. Coordinate with Chloe on streamlined check-in process, ideally collecting passports during dinner and distributing room cards before/after
+                    <div class="timeline-item">
+                        <div class="time">19:00</div>
+                        <div class="activity">Japan Delegation Collection</div>
+                        <div class="details">Airport collection (NX861 lands 20:05)</div>
                     </div>
                 </div>
             </div>
-            
-            <div class="note-box">
-                <h3>Key Focus Areas</h3>
-                <p><strong>Check-in Optimisation:</strong> Speak with Chloe about making check-in seamless. Goal is to have all room cards ready to distribute to market guests before or after dinner.<br><br>
-                <strong>Coordination:</strong> You're the central point for rooftop operations, guest management, and ensuring smooth handoffs throughout the day.</p>
+            <div class="day-section">
+                <div class="day-header">Saturday 15th November</div>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="time">09:45</div>
+                        <div class="activity">Meet Shell China Guests</div>
+                        <div class="details">60 guests from bus to rooftop</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="time">11:00</div>
+                        <div class="activity">Shell Helix Launch</div>
+                        <div class="details">Main rooftop event coordination</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="time">PM</div>
+                        <div class="activity">Garage Tours</div>
+                        <div class="details">Coordinate China guest garage tours</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="time">18:00</div>
+                        <div class="activity">BMW Dinner</div>
+                        <div class="details">Galaxy Macau shuttle coordination</div>
+                    </div>
+                </div>
+            </div>
+            <div class="day-section">
+                <div class="day-header">Sunday 16th November</div>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="time">09:00</div>
+                        <div class="activity">Hospitality Opens</div>
+                        <div class="details">Final race day operations</div>
+                    </div>
+                </div>
             </div>
         </div>
         
-        <!-- Vik's Detail View -->
         <div class="detail-view vik" id="detail-vik">
             <div class="detail-header">
-                <h2>Vik's Schedule</h2>
-                <button class="close-btn" data-action="close">✕ Close</button>
+                <h2>Vik</h2>
+                <button class="close-btn">✕</button>
             </div>
-            
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="time">09:50</div>
-                    <div class="activity">Meet in Lobby</div>
-                    <div class="details">
-                        Meet Joris and Emily with Graeme in the lobby to collect tickets
+            <div class="day-section">
+                <div class="day-header">Friday 14th November</div>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="time">09:50</div>
+                        <div class="activity">Meet in Lobby</div>
+                        <div class="details">Collect tickets with Graeme</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="time">10:00</div>
+                        <div class="activity">Gifting Delivery</div>
+                        <div class="details">Bring gifting to hotel lobby</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="time">11:00</div>
+                        <div class="activity">Rooftop Introduction</div>
+                        <div class="details">Meet Helen's team with Graeme</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="time">15:00</div>
+                        <div class="activity">China Market Check</div>
+                        <div class="details">Guest check with Graeme</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="time">16:30</div>
+                        <div class="activity">Rooftop Rehearsal - ALL TEAM</div>
+                        <div class="details">Full team rehearsal</div>
                     </div>
                 </div>
-                
-                <div class="timeline-item">
-                    <div class="time">10:00</div>
-                    <div class="activity">Gifting Delivery</div>
-                    <div class="details">
-                        Bring down gifting to the hotel lobby
-                    </div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="time">11:00</div>
-                    <div class="activity">Rooftop Introduction</div>
-                    <div class="details">
-                        Head to top floor with Graeme to introduce yourselves to Helen and the rooftop team
-                    </div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="time">15:00</div>
-                    <div class="activity">China Market Check</div>
-                    <div class="details">
-                        Head upstairs with Graeme to check on China market guests
-                    </div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="time">16:30</div>
-                    <div class="activity">Rooftop Rehearsal - ALL TEAM</div>
-                    <div class="details">
-                        Everyone on the roof (pending Emily's approval) to ensure smooth running of rehearsal and confirm Saturday's arrangements. Full team attendance required
-                    </div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="time">Evening</div>
-                    <div class="activity">Market Greeting</div>
-                    <div class="details">
-                        Be in the lobby with Graeme, ready to greet market guests and usher them into the dining room for dinner
-                    </div>
-                </div>
-            </div>
-            
-            <div class="note-box">
-                <h3>Key Responsibilities</h3>
-                <p><strong>Guest Experience:</strong> Your presence in the lobby sets the tone for market arrivals. Ensure warm, professional greeting and smooth transition to dining.<br><br>
-                <strong>Rooftop Team Relationship:</strong> Use the morning introduction to build rapport with Helen's team for smooth weekend operations.</p>
             </div>
         </div>
         
-        <!-- Jan's Detail View -->
         <div class="detail-view jan" id="detail-jan">
             <div class="detail-header">
-                <h2>Jan's Schedule</h2>
-                <button class="close-btn" data-action="close">✕ Close</button>
+                <h2>Jan</h2>
+                <button class="close-btn">✕</button>
             </div>
-            
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="time">10:15-10:30</div>
-                    <div class="activity">Airport Schedule Briefing</div>
-                    <div class="details">
-                        Meet Graeme in the lobby to run through airport schedule, timings, and procedures
+            <div class="day-section">
+                <div class="day-header">Friday 14th November</div>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="time">10:15</div>
+                        <div class="activity">Airport Briefing</div>
+                        <div class="details">Meet Graeme for schedule review</div>
                     </div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="time">11:20 (approx)</div>
-                    <div class="activity">Depart for Airport</div>
-                    <div class="details">
-                        Leave hotel to arrive at airport around 11:45 to collect Chris and Karl
+                    <div class="timeline-item">
+                        <div class="time">11:55</div>
+                        <div class="activity">Chris & Karl Collection</div>
+                        <div class="details">Airport transfer (test run)</div>
                     </div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="time">11:45</div>
-                    <div class="activity">Airport Collection</div>
-                    <div class="details">
-                        Be at airport to collect Chris and Karl. Test and observe hotel transport process and timings
+                    <div class="timeline-item">
+                        <div class="time">16:30</div>
+                        <div class="activity">Rooftop Rehearsal - ALL TEAM</div>
+                        <div class="details">Full team rehearsal</div>
                     </div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="time">Post-Transfer</div>
-                    <div class="activity">Debrief with Graeme</div>
-                    <div class="details">
-                        After completing Chris and Karl transfer, debrief with Graeme on how the transport worked. Use this learning to finalise details and timings for Japan delegation collection at 19:00
-                    </div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="time">16:30</div>
-                    <div class="activity">Rooftop Rehearsal - ALL TEAM</div>
-                    <div class="details">
-                        Everyone on the roof (pending Emily's approval) to ensure smooth running of rehearsal and confirm Saturday's arrangements. Full team attendance required
-                    </div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="time">19:00</div>
-                    <div class="activity">Japan Delegation Collection</div>
-                    <div class="details">
-                        Be ready to collect Japan delegation from airport. Apply lessons learned from earlier transfer. Final coordination with Graeme post-debrief
+                    <div class="timeline-item">
+                        <div class="time">19:30</div>
+                        <div class="activity">Japan Delegation Collection</div>
+                        <div class="details">Airport transfer (NX861 at 20:05)</div>
                     </div>
                 </div>
             </div>
-            
+        </div>
+        
+        <div class="detail-view emily" id="detail-emily">
+            <div class="detail-header">
+                <h2>Emily</h2>
+                <button class="close-btn">✕</button>
+            </div>
+            <div class="day-nav">
+                <button class="day-btn active" data-day="emily-fri">Friday</button>
+                <button class="day-btn" data-day="emily-sat">Saturday</button>
+                <button class="day-btn" data-day="emily-sun">Sunday</button>
+            </div>
+            <div class="day-section" id="emily-fri">
+                <div class="day-header">Friday 14th November</div>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="time">06:00</div>
+                        <div class="activity">Rooftop Branding Setup</div>
+                        <div class="details">Oversee setup with Helen's agency</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="time">14:00</div>
+                        <div class="activity">Garage Filming</div>
+                        <div class="details">BMW garage filming with Sheldon (1 hour)</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="time">16:30</div>
+                        <div class="activity">Rooftop Rehearsal</div>
+                        <div class="details">Lead rehearsal with BMW and Shell teams</div>
+                    </div>
+                </div>
+            </div>
+            <div class="day-section hidden" id="emily-sat">
+                <div class="day-header">Saturday 15th November</div>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="time">07:00</div>
+                        <div class="activity">Final Checks</div>
+                        <div class="details">Rooftop setup and branding check</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="time">11:00</div>
+                        <div class="activity">Shell Helix Launch</div>
+                        <div class="details">Main coordination role (30-35 mins)</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="time">11:30</div>
+                        <div class="activity">Meet & Greet</div>
+                        <div class="details">Sheldon photo opportunities</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="time">PM</div>
+                        <div class="activity">Garage Tours</div>
+                        <div class="details">Coordinate Shell China garage tours</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="time">18:30</div>
+                        <div class="activity">BMW Dinner</div>
+                        <div class="details">Galaxy Macau Hotel</div>
+                    </div>
+                </div>
+            </div>
+            <div class="day-section hidden" id="emily-sun">
+                <div class="day-header">Sunday 16th November</div>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="time">09:00</div>
+                        <div class="activity">Hospitality Operations</div>
+                        <div class="details">Oversee rooftop for race day</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="time">TBC</div>
+                        <div class="activity">Japan Garage Tour</div>
+                        <div class="details">Coordinate BMW garage tour</div>
+                    </div>
+                </div>
+            </div>
             <div class="note-box">
-                <h3>Critical Learning Opportunity</h3>
-                <p><strong>First Transfer as Test Run:</strong> Your Chris and Karl collection is the learning run. Pay close attention to hotel transport coordination, timing accuracy, and any potential issues.<br><br>
-                <strong>Evening Precision:</strong> Japan delegation collection needs to be flawless. Use morning experience to perfect the process.</p>
+                <h3>Primary Coordination Role</h3>
+                <p>Shell lead for filming, launches, garage access, BMW liaison. Saturday launch is key moment.</p>
+            </div>
+        </div>
+        
+        <div class="detail-view japan" id="detail-japan">
+            <div class="detail-header">
+                <h2>Japan Delegation</h2>
+                <button class="close-btn">✕</button>
+            </div>
+            <div class="day-nav">
+                <button class="day-btn active" data-day="japan-fri">Friday</button>
+                <button class="day-btn" data-day="japan-sat">Saturday</button>
+                <button class="day-btn" data-day="japan-sun">Sunday</button>
+                <button class="day-btn" data-day="japan-mon">Monday</button>
+            </div>
+            <div class="day-section" id="japan-fri">
+                <div class="day-header">Friday 14th November</div>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="time">20:05</div>
+                        <div class="activity">Arrival</div>
+                        <div class="details">Flight NX861 arrives at Macau Airport</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="time">21:00</div>
+                        <div class="activity">Welcome Dinner</div>
+                        <div class="details">Hotel buffet or room service vouchers</div>
+                    </div>
+                </div>
+            </div>
+            <div class="day-section hidden" id="japan-sat">
+                <div class="day-header">Saturday 15th November</div>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="time">09:00</div>
+                        <div class="activity">City Tour</div>
+                        <div class="details">Independent Macau city tour</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="time">18:30</div>
+                        <div class="activity">BMW Dinner</div>
+                        <div class="details">Tatler Off Menu, Galaxy Macau Hotel</div>
+                    </div>
+                </div>
+            </div>
+            <div class="day-section hidden" id="japan-sun">
+                <div class="day-header">Sunday 16th November</div>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="time">09:00</div>
+                        <div class="activity">Rooftop Hospitality</div>
+                        <div class="details">Race day viewing</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="time">TBC</div>
+                        <div class="activity">BMW Garage Tour</div>
+                        <div class="details">Exclusive garage access</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="time">15:30</div>
+                        <div class="activity">Macau Grand Prix</div>
+                        <div class="details">Main race (15 laps)</div>
+                    </div>
+                </div>
+            </div>
+            <div class="day-section hidden" id="japan-mon">
+                <div class="day-header">Monday 18th November</div>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="time">Morning</div>
+                        <div class="activity">Departure</div>
+                        <div class="details">Breakfast boxes provided, departure coordination</div>
+                    </div>
+                </div>
+            </div>
+            <div class="note-box">
+                <h3>Full Weekend Package</h3>
+                <p>Contact: Wataru POC. Includes transfers, accommodation, city tour, BMW dinner, rooftop hospitality, garage tour.</p>
             </div>
         </div>
     </div>
     
     <script>
-        // Wait for DOM to be fully loaded
         document.addEventListener('DOMContentLoaded', function() {
-            
-            // Get all team cards
             const teamCards = document.querySelectorAll('.team-card');
             const closeButtons = document.querySelectorAll('.close-btn');
             const teamGrid = document.getElementById('teamGrid');
+            const dayButtons = document.querySelectorAll('.day-btn');
             
-            // Add click listeners to team cards
             teamCards.forEach(card => {
-                card.addEventListener('click', function(e) {
-                    e.preventDefault();
+                card.addEventListener('click', function() {
                     const person = this.getAttribute('data-person');
-                    showDetail(person);
-                });
-                
-                // Also add touch event for better mobile support
-                card.addEventListener('touchend', function(e) {
-                    e.preventDefault();
-                    const person = this.getAttribute('data-person');
-                    showDetail(person);
+                    document.querySelectorAll('.detail-view').forEach(v => v.classList.remove('active'));
+                    teamGrid.style.display = 'none';
+                    document.getElementById('detail-' + person).classList.add('active');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 });
             });
             
-            // Add click listeners to close buttons
             closeButtons.forEach(btn => {
                 btn.addEventListener('click', function(e) {
-                    e.preventDefault();
                     e.stopPropagation();
-                    hideDetail();
-                });
-                
-                // Also add touch event for better mobile support
-                btn.addEventListener('touchend', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    hideDetail();
+                    document.querySelectorAll('.detail-view').forEach(v => v.classList.remove('active'));
+                    teamGrid.style.display = 'grid';
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 });
             });
             
-            function showDetail(person) {
-                // Hide all detail views
-                document.querySelectorAll('.detail-view').forEach(view => {
-                    view.classList.remove('active');
+            dayButtons.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const dayId = this.getAttribute('data-day');
+                    const parent = this.closest('.detail-view');
+                    parent.querySelectorAll('.day-section').forEach(s => s.classList.add('hidden'));
+                    parent.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+                    document.getElementById(dayId).classList.remove('hidden');
+                    this.classList.add('active');
                 });
-                
-                // Hide team grid
-                teamGrid.style.display = 'none';
-                
-                // Show selected detail view
-                const detailView = document.getElementById('detail-' + person);
-                if (detailView) {
-                    detailView.classList.add('active');
-                }
-                
-                // Smooth scroll to top
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-            
-            function hideDetail() {
-                // Hide all detail views
-                document.querySelectorAll('.detail-view').forEach(view => {
-                    view.classList.remove('active');
-                });
-                
-                // Show team grid
-                teamGrid.style.display = 'grid';
-                
-                // Smooth scroll to top
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
+            });
         });
     </script>
 </body>
